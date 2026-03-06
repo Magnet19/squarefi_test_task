@@ -65,6 +65,54 @@ const { username, password } = rawData; // без валидации
 - Все запросы к DummyJSON проходят через `lib/api/fetcher.ts`
 - Fetcher автоматически: подставляет Bearer token из cookies, обрабатывает 401 → refresh → retry, парсит и валидирует ответ через zod-схему
 
+### Правило: дедупликация refresh (Single Refresh)
+
+- При параллельных 401 (например `Promise.all` на Dashboard) refresh вызывается **один раз**
+- Реализация: один модульный промис на уровне fetcher-модуля
+
+```ts
+let refreshPromise: Promise<string> | null = null;
+
+async function refreshTokens(currentRefreshToken: string) {
+  if (!refreshPromise) {
+    refreshPromise = doRefresh(currentRefreshToken).finally(() => {
+      refreshPromise = null;
+    });
+  }
+  return refreshPromise;
+}
+```
+
+- Остальные параллельные вызовы, получившие 401, ждут тот же промис и после его завершения делают retry с новым access_token
+- После resolve/reject промис сбрасывается в `null` — следующий 401 создаст новый refresh
+
+### Правило: изоляция между сессиями
+
+- Каждый HTTP-запрос к Next.js серверу несёт свои cookies — refresh_token конкретного пользователя
+- `refreshPromise` на уровне модуля — это не глобальный стейт между пользователями: в рамках одного серверного запроса (или группы параллельных fetch к внешнему API внутри одного SSR) промис дедуплицирует refresh для **одной сессии**
+- Разные пользователи приходят с разными cookies → разные refresh_token → разные вызовы refresh
+- Если два пользователя одновременно попали на один инстанс — промис создаётся по факту вызова `refreshTokens()`, каждый со своим `currentRefreshToken`. Коллизии нет, потому что refresh_token разный
+
+### Правило: автоматический retry после refresh
+
+- Fetcher при получении 401: вызывает `refreshTokens()` → получает новый access_token → **повторяет оригинальный запрос** автоматически
+- Пользователь не видит ошибки, не переходит на /login — retry прозрачен
+- Retry делается **один раз**. Если повторный запрос тоже вернул 401 — значит refresh не помог, выполняется логаут
+
+### Правило: логаут при невозможности обновить токены
+
+- Если refresh-запрос вернул ошибку (401, 403, сетевая ошибка) — очистить все auth-cookies
+- Редирект на `/login`
+- Это происходит внутри fetcher'а — вызывающий код получает ошибку типа `AuthError`, которую можно обработать на уровне Server Action / Server Component
+
+### Правило: срок жизни cookies
+
+- `maxAge` cookie access_token — привязать к сроку жизни токена, который возвращает API (поле может называться `expiresInMins`, `expires_in`, `exp` — зависит от бэкенда)
+- `maxAge` cookie refresh_token — значительно больше access (конкретное значение определяется API)
+- Если API не возвращает срок жизни явно — парсить `exp` из JWT payload (base64-decode, без верификации подписи — она не нужна для чтения `exp`)
+- Реализацию чтения срока жизни вынести в отдельную утилиту, чтобы при смене API поменять одну функцию
+- Proxy проверяет только наличие cookie, не валидирует срок — fetcher обработает 401 если токен истёк
+
 ### Правило: типизация API
 
 - Типы ответов DummyJSON — в `lib/api/types/`

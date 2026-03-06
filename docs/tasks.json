@@ -2,41 +2,41 @@
   {
     "phase": 1,
     "title": "Инициализация и Базовая Архитектура",
-    "description": "Создание фундамента проекта, настройка типов, API-клиента и логики Single Refresh",
+    "description": "Создание фундамента проекта, настройка TypeScript strict mode, Zod typings, API fetcher и Single Refresh паттерна.",
     "tasks": [
       {
         "id": "1.1",
-        "title": "Инициализация Next.js и установка зависимостей",
+        "title": "Инициализация Next.js, настройка безопасности в next.config.ts и tsconfig.json (strict mode)",
         "status": "completed"
       },
       {
         "id": "1.2",
-        "title": "Установка и инициализация shadcn/ui",
+        "title": "Установка и инициализация shadcn/ui, настройка eslint без barrel-файлов",
         "status": "completed"
       },
       {
         "id": "1.3",
-        "title": "Определение типов Zod и TypeScript для DummyJSON",
+        "title": "Определение Zod-схем в lib/api/types/ и типизация через z.infer",
         "status": "completed"
       },
       {
         "id": "1.4",
-        "title": "Реализация паттерна Single Refresh (getValidAccessToken)",
+        "title": "Реализация паттерна Single Refresh (локальный Promise модуля без Map)",
         "status": "completed"
       },
       {
         "id": "1.5",
-        "title": "Сборка изолированного API-клиента (apiFetch)",
+        "title": "Сборка изолированного API-клиента (fetcher.ts) с server-only и cache: no-store для /auth/*",
         "status": "completed"
       },
       {
         "id": "1.6",
-        "title": "Защита страниц через proxy.ts",
+        "title": "Защита страниц через proxy.ts уровня Node.js",
         "status": "completed"
       },
       {
         "id": "1.7",
-        "title": "Настройка Auth Server Actions (loginAction, logoutAction)",
+        "title": "Настройка Auth Server Actions (lib/actions/auth.actions.ts) с возвратом типа ActionResult",
         "status": "completed"
       }
     ]
@@ -44,70 +44,70 @@
   {
     "phase": 2,
     "title": "Аутентификация и UI",
-    "description": "Построение интерфейса авторизации и рендер страницы логина",
+    "description": "Построение интерфейса авторизации с клиентской и серверной валидацией.",
     "tasks": [
       {
         "id": "2.1",
-        "title": "Создание UI-компонента LoginForm с валидацией",
+        "title": "Создание UI-компонента LoginForm с клиентской валидацией Zod",
         "status": "completed"
       },
       {
         "id": "2.2",
-        "title": "Интеграция LoginForm с Server Action и обработка состояния",
+        "title": "Интеграция LoginForm с auth.actions.ts через useActionState/useTransition",
         "status": "completed"
       },
       {
         "id": "2.3",
-        "title": "Создание Server Component для маршрута /login",
+        "title": "Создание Server Component для маршрута /login с error.tsx boundary",
         "status": "completed"
       }
     ]
   },
   {
     "phase": 3,
-    "title": "Dashboard и Список продуктов",
-    "description": "SSR рендеринг списка товаров, серверная пагинация",
+    "title": "Dashboard и Пагинация",
+    "description": "Рендеринг защищенной зоны, распараллеливание запросов и серверная пагинация.",
     "tasks": [
       {
         "id": "3.1",
-        "title": "Создание макета (layout) для Dashboard",
+        "title": "Создание page.tsx для /dashboard с параллельной загрузкой SSR (Promise.all для user, carts, products)",
         "status": "pending"
       },
       {
         "id": "3.2",
-        "title": "Реализация UI-компонента ProductCard",
+        "title": "Реализация UI-компонента ProductCard (Server Component)",
         "status": "pending"
       },
       {
         "id": "3.3",
-        "title": "Реализация компонента пагинации (Client Component c update URL)",
+        "title": "Реализация компонента пагинации (Client Component c update URL searchParams)",
         "status": "pending"
       },
       {
         "id": "3.4",
-        "title": "Связка apiFetch c Server Component /dashboard/page.tsx",
+        "title": "Добавление локального error.tsx для Dashboard",
         "status": "pending"
       }
     ]
   },
   {
     "phase": 4,
-    "title": "Взаимодействие с корзиной",
-    "description": "Интеграция Server Actions для работы с корзиной без глобального стейта",
+    "title": "Мутации и Корзина",
+    "description": "Разработка Server Actions для корзины с обработкой ошибок и тостами.",
     "tasks": [
       {
         "id": "4.1",
-        "title": "Написание Server Action addToCartAction",
+        "title": "Написание cart.actions.ts с Zod валидацией и возвратом ActionResult",
         "status": "pending"
       },
       {
         "id": "4.2",
-        "title": "Создание компонента AddToCartButton",
+        "title": "Создание AddToCartButton (Client Component) с useTransition",
         "status": "pending"
       },
       {
         "id": "4.3",
-        "title": "Интеграция Sonner для тостов (уведомлений)",
+        "title": "Интеграция Sonner для тостов (обработка ошибок из ActionResult)",
         "status": "pending"
       },
       {
