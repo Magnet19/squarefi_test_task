@@ -98,22 +98,22 @@
       {
         "id": "4.1",
         "title": "Написание cart.actions.ts с Zod валидацией и возвратом ActionResult",
-        "status": "pending"
+        "status": "completed"
       },
       {
         "id": "4.2",
         "title": "Создание AddToCartButton (Client Component) с useTransition",
-        "status": "pending"
+        "status": "completed"
       },
       {
         "id": "4.3",
         "title": "Интеграция Sonner для тостов (обработка ошибок из ActionResult)",
-        "status": "pending"
+        "status": "completed"
       },
       {
         "id": "4.4",
         "title": "Настройка revalidatePath после мутации добавления в корзину",
-        "status": "pending"
+        "status": "completed"
       }
     ]
   }
