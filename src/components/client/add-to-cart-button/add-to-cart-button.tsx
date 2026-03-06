@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import type { AddToCartButtonProps } from "./add-to-cart-button.types";
 
-export function AddToCartButton({ userId, productId, onCartAdded }: AddToCartButtonProps) {
+export function AddToCartButton({ userId, productId }: AddToCartButtonProps) {
   const [isPending, startTransition] = useTransition();
 
   function handleAddToCart() {
@@ -15,7 +15,6 @@ export function AddToCartButton({ userId, productId, onCartAdded }: AddToCartBut
       const result = await addToCartAction(userId, productId);
       if (result.success) {
         toast.success("Товар добавлен в корзину");
-        onCartAdded?.(result.data);
       } else {
         toast.error(result.error);
       }

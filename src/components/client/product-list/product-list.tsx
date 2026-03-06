@@ -14,7 +14,6 @@ export function ProductList({
   initialProducts,
   initialTotal,
   userId,
-  onCartAdded,
 }: ProductListProps) {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [isPending, startTransition] = useTransition();
@@ -49,7 +48,6 @@ export function ProductList({
                 <AddToCartButton
                   userId={userId}
                   productId={product.id}
-                  onCartAdded={onCartAdded}
                 />
               </div>
             </div>
