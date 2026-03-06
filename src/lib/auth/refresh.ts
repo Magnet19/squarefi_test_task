@@ -2,7 +2,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import type { AuthResponse } from "@/types/dummyjson";
 
-const refreshPromises = new Map<string, Promise<string>>();
+const refreshPromises = new Map<string, Promise<string | null>>();
 
 export async function getValidAccessToken(): Promise<string | null> {
   const cookieStore = await cookies();

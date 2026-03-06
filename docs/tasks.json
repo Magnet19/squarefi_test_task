@@ -49,17 +49,17 @@
       {
         "id": "2.1",
         "title": "Создание UI-компонента LoginForm с валидацией",
-        "status": "pending"
+        "status": "completed"
       },
       {
         "id": "2.2",
         "title": "Интеграция LoginForm с Server Action и обработка состояния",
-        "status": "pending"
+        "status": "completed"
       },
       {
         "id": "2.3",
         "title": "Создание Server Component для маршрута /login",
-        "status": "pending"
+        "status": "completed"
       }
     ]
   },
