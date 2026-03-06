@@ -7,7 +7,7 @@ import { ProductCard } from "@/components/server/product-card/product-card";
 import { Pagination } from "@/components/client/pagination/pagination";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const PRODUCTS_PER_PAGE = 6;
+const PRODUCTS_PER_PAGE = 5;
 
 const searchParamsSchema = z.object({
   page: z.coerce.number().int().positive().catch(1),
@@ -92,7 +92,7 @@ export default async function DashboardPage({
         <h2 className="text-lg font-semibold">Продукты</h2>
         {productsResult ? (
           <>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="flex flex-col gap-4">
               {productsResult.products.map((product) => (
                 <ProductCard
                   key={product.id}

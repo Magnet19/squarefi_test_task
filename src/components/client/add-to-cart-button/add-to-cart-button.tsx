@@ -4,6 +4,7 @@ import { useTransition } from "react";
 import { toast } from "sonner";
 import { addToCartAction } from "@/lib/actions/cart.actions";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 import type { AddToCartButtonProps } from "./add-to-cart-button.types";
 
 export function AddToCartButton({ userId, productId }: AddToCartButtonProps) {
@@ -21,8 +22,8 @@ export function AddToCartButton({ userId, productId }: AddToCartButtonProps) {
   }
 
   return (
-    <Button size="sm" onClick={handleAddToCart} disabled={isPending}>
-      {isPending ? "Добавляем..." : "В корзину"}
+    <Button size="sm" onClick={handleAddToCart} disabled={isPending} className="min-w-[90px]">
+      {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "В корзину"}
     </Button>
   );
 }

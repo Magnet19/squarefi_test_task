@@ -22,9 +22,12 @@ export async function apiFetch<T>(
   const {
     requireAuth = true,
     headers: customHeaders,
-    cache = "no-store", // Правило §3 — авторизованные данные не кешировать
+    cache,
+    next,
     ...restOptions
   } = options;
+
+  const resolvedCache = cache ?? (next?.revalidate !== undefined ? undefined : "no-store");
 
   const headers = new Headers(customHeaders);
   headers.set("Content-Type", "application/json");
@@ -43,8 +46,18 @@ export async function apiFetch<T>(
     ? endpoint
     : `${env.API_BASE_URL}${endpoint}`;
 
-  // 2. Делаем запрос
-  const response = await fetch(url, { headers, cache, ...restOptions });
+  // 2. Делаем запрос с retry при rate limit
+  let response = await fetch(url, { headers, cache: resolvedCache, next, ...restOptions });
+
+  if (response.status === 429 || (response.status !== 401 && !response.ok)) {
+    const errText = await response.text();
+    if (errText.includes("request limit exceeded")) {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      response = await fetch(url, { headers, cache: resolvedCache, next, ...restOptions });
+    } else if (!response.ok) {
+      throw new Error(errText || `API Error: ${response.status}`);
+    }
+  }
 
   // 3. Обработка 401
   if (response.status === 401) {

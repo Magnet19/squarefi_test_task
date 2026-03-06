@@ -5,13 +5,7 @@ import { toast } from "sonner";
 import { loadMoreProductsAction } from "@/lib/actions/product.actions";
 import { AddToCartButton } from "@/components/client/add-to-cart-button/add-to-cart-button";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardTitle } from "@/components/ui/card";
 import type { Product } from "@/lib/api/types/product.schema";
 import type { ProductListProps } from "./product-list.types";
 
@@ -38,23 +32,21 @@ export function ProductList({
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="flex flex-col gap-4">
         {products.map((product) => (
           <Card key={product.id}>
-            <CardHeader>
-              <CardTitle className="text-sm line-clamp-2">
-                {product.title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-1 text-sm">
-              <p className="font-semibold">${product.price}</p>
-              <p className="text-muted-foreground line-clamp-2">
-                {product.description}
-              </p>
-            </CardContent>
-            <CardFooter>
-              <AddToCartButton userId={userId} productId={product.id} />
-            </CardFooter>
+            <div className="flex flex-col gap-3 px-6 py-4 md:flex-row md:items-center md:justify-between">
+              <div className="flex-1 space-y-1">
+                <CardTitle className="text-sm">{product.title}</CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  {product.description}
+                </p>
+              </div>
+              <div className="flex items-center gap-4 md:ml-6">
+                <p className="font-semibold text-sm">${product.price}</p>
+                <AddToCartButton userId={userId} productId={product.id} />
+              </div>
+            </div>
           </Card>
         ))}
       </div>

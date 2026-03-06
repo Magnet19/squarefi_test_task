@@ -11,7 +11,6 @@ import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -45,9 +44,6 @@ export function LoginForm() {
         <CardTitle className="text-2xl font-bold text-center">
           Вход в систему
         </CardTitle>
-        <CardDescription className="text-center">
-          Введите ваши учётные данные для доступа к панели
-        </CardDescription>
       </CardHeader>
 
       <form action={formAction}>

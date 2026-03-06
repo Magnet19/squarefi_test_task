@@ -7,5 +7,7 @@ export async function getProducts(
   limit = 5,
   skip = 0,
 ): Promise<ProductsResponse> {
-  return apiFetch(`/auth/products?limit=${limit}&skip=${skip}`, productsResponseSchema);
+  return apiFetch(`/auth/products?limit=${limit}&skip=${skip}`, productsResponseSchema, {
+    next: { revalidate: 60 },
+  });
 }
