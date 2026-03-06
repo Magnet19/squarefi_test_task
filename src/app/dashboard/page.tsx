@@ -1,21 +1,37 @@
+import { z } from "zod";
 import { getMe } from "@/lib/api/user";
 import { getProducts } from "@/lib/api/products";
 import { getUserCarts } from "@/lib/api/carts";
 import { LogoutButton } from "@/components/client/logout-button";
-import { ProductList } from "@/components/client/product-list";
+import { ProductCard } from "@/components/server/product-card";
+import { Pagination } from "@/components/client/pagination";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default async function DashboardPage() {
-  // Шаг 1: получаем пользователя (нужен userId для запроса корзин)
+const PRODUCTS_PER_PAGE = 6;
+
+const searchParamsSchema = z.object({
+  page: z.coerce.number().int().positive().catch(1),
+});
+
+interface DashboardPageProps {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}
+
+export default async function DashboardPage({
+  searchParams,
+}: DashboardPageProps) {
+  const rawParams = await searchParams;
+  const { page } = searchParamsSchema.parse(rawParams);
+  const skip = (page - 1) * PRODUCTS_PER_PAGE;
+
   const user = await getMe();
 
-  // Шаг 2: загружаем корзины и продукты параллельно (правило §4 — Promise.all)
   const [cartsResult, productsResult] = await Promise.all([
     getUserCarts(user.id).catch((err: unknown) => {
       console.error("Failed to load carts:", err);
       return null;
     }),
-    getProducts(5, 0).catch((err: unknown) => {
+    getProducts(PRODUCTS_PER_PAGE, skip).catch((err: unknown) => {
       console.error("Failed to load products:", err);
       return null;
     }),
@@ -76,14 +92,25 @@ export default async function DashboardPage() {
       </Card>
 
       {/* Products */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         <h2 className="text-lg font-semibold">Продукты</h2>
         {productsResult ? (
-          <ProductList
-            initialProducts={productsResult.products}
-            initialTotal={productsResult.total}
-            userId={user.id}
-          />
+          <>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {productsResult.products.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  userId={user.id}
+                />
+              ))}
+            </div>
+            <Pagination
+              page={page}
+              total={productsResult.total}
+              limit={PRODUCTS_PER_PAGE}
+            />
+          </>
         ) : (
           <p className="text-destructive text-sm">
             Не удалось загрузить продукты

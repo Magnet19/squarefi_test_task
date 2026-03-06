@@ -71,22 +71,22 @@
       {
         "id": "3.1",
         "title": "Создание page.tsx для /dashboard с параллельной загрузкой SSR (Promise.all для user, carts, products)",
-        "status": "pending"
+        "status": "completed"
       },
       {
         "id": "3.2",
         "title": "Реализация UI-компонента ProductCard (Server Component)",
-        "status": "pending"
+        "status": "completed"
       },
       {
         "id": "3.3",
         "title": "Реализация компонента пагинации (Client Component c update URL searchParams)",
-        "status": "pending"
+        "status": "completed"
       },
       {
         "id": "3.4",
         "title": "Добавление локального error.tsx для Dashboard",
-        "status": "pending"
+        "status": "completed"
       }
     ]
   },
