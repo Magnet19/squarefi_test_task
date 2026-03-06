@@ -13,6 +13,7 @@ export async function loadMoreProductsAction(
     return { success: true, data };
   } catch (error) {
     console.error("Load more products error:", error);
-    return { success: false, error: "Не удалось загрузить продукты" };
+    const message = error instanceof Error ? error.message : "Не удалось загрузить продукты";
+    return { success: false, error: message };
   }
 }

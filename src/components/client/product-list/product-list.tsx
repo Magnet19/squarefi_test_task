@@ -14,6 +14,7 @@ export function ProductList({
   initialProducts,
   initialTotal,
   userId,
+  onCartAdded,
 }: ProductListProps) {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [isPending, startTransition] = useTransition();
@@ -43,9 +44,13 @@ export function ProductList({
                   {product.description}
                 </p>
               </div>
-              <div className="flex items-center gap-4 md:ml-6">
+              <div className="flex items-center gap-4 md:ml-6 justify-between">
                 <p className="font-semibold text-sm">${product.price}</p>
-                <AddToCartButton userId={userId} productId={product.id} />
+                <AddToCartButton
+                  userId={userId}
+                  productId={product.id}
+                  onCartAdded={onCartAdded}
+                />
               </div>
             </div>
           </Card>

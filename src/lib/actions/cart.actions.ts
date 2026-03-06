@@ -26,6 +26,7 @@ export async function addToCartAction(
     return { success: true, data };
   } catch (error) {
     console.error("Add to cart error:", error);
-    return { success: false, error: "Не удалось добавить товар в корзину" };
+    const message = error instanceof Error ? error.message : "Не удалось добавить товар в корзину";
+    return { success: false, error: message };
   }
 }
