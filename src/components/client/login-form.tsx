@@ -3,7 +3,8 @@
 import { useActionState } from "react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { loginAction } from "@/actions/auth";
+import { toast } from "sonner";
+import { loginAction } from "@/lib/actions/auth.actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,9 +16,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { Result } from "@/types/dummyjson";
+import type { ActionResult } from "@/types/dummyjson";
 
-const initialState: Result<{ redirect: string }> | null = null;
+const initialState: ActionResult<{ redirect: string }> | null = null;
 
 export function LoginForm() {
   const [state, formAction, isPending] = useActionState(
@@ -26,10 +27,15 @@ export function LoginForm() {
   );
   const router = useRouter();
 
-  // При успешном логине — редирект на dashboard
   useEffect(() => {
-    if (state?.success && state.data.redirect) {
+    if (!state) return;
+
+    if (state.success && state.data.redirect) {
+      // При успешном логине — редирект на dashboard
       router.push(state.data.redirect);
+    } else if (!state.success) {
+      // Ошибки мутаций → toast (правило §5)
+      toast.error(state.error);
     }
   }, [state, router]);
 
@@ -46,13 +52,6 @@ export function LoginForm() {
 
       <form action={formAction}>
         <CardContent className="space-y-4">
-          {/* Ошибка из Server Action (Result<T, E>) */}
-          {state && !state.success && (
-            <div className="rounded-md bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive">
-              {state.error.message}
-            </div>
-          )}
-
           <div className="space-y-2">
             <Label htmlFor="username">Имя пользователя</Label>
             <Input

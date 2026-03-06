@@ -1,39 +1,11 @@
-export type Result<T, E = Error> =
+/**
+ * Стандартный тип результата для Server Actions.
+ * error — всегда string, не Error-объект (правило §2).
+ */
+export type ActionResult<T> =
   | { success: true; data: T }
-  | { success: false; error: E };
+  | { success: false; error: string };
 
-export interface User {
-  id: number;
-  username: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  gender: string;
-  image: string;
-}
-
-export interface AuthResponse extends User {
-  accessToken: string;
-  refreshToken: string;
-}
-
-export interface Product {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  discountPercentage: number;
-  rating: number;
-  stock: number;
-  brand: string;
-  category: string;
-  thumbnail: string;
-  images: string[];
-}
-
-export interface ProductsResponse {
-  products: Product[];
-  total: number;
-  skip: number;
-  limit: number;
-}
+// Re-export types from zod schemas — single source of truth
+export type { User, AuthResponse } from "@/lib/api/types/auth.schema";
+export type { Product, ProductsResponse } from "@/lib/api/types/product.schema";

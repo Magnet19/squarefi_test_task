@@ -1,6 +1,7 @@
 import "server-only";
 import { cookies } from "next/headers";
-import type { AuthResponse } from "@/types/dummyjson";
+import { authResponseSchema } from "@/lib/api/types/auth.schema";
+import { env } from "@/lib/env";
 
 const refreshPromises = new Map<string, Promise<string | null>>();
 
@@ -31,14 +32,15 @@ export async function refreshAccessToken(
   }
 
   // 2. Инициируем запрос и сохраняем промис
-  const requestPromise = fetch("https://dummyjson.com/auth/refresh", {
+  const requestPromise = fetch(`${env.API_BASE_URL}/auth/refresh`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
+    cache: "no-store", // Правило §3 — auth запросы не кешировать
     body: JSON.stringify({
-      refreshToken: refreshToken,
-      expiresInMins: 30, // Выставляем 30 минут, хотя DummyJSON это игнорирует иногда
+      refreshToken,
+      expiresInMins: 30,
     }),
   })
     .then(async (res) => {
@@ -46,24 +48,33 @@ export async function refreshAccessToken(
         throw new Error("Refresh failed");
       }
 
-      const data: AuthResponse = await res.json();
+      // Валидация ответа через zod-схему (правило §6)
+      const json: unknown = await res.json();
+      const parsed = authResponseSchema.safeParse(json);
+      if (!parsed.success) {
+        console.error(
+          "Refresh response validation failed:",
+          parsed.error.flatten(),
+        );
+        throw new Error("Invalid refresh response");
+      }
+
+      const data = parsed.data;
 
       // 3. Сохраняем свежие токены
       const cookieStore = await cookies();
 
       cookieStore.set("access_token", data.accessToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: env.NODE_ENV === "production",
         sameSite: "lax",
         path: "/",
-        // Не задаем expires в куки, чтобы она была сессионной,
-        // либо можно достать JWT срок действия. Для простоты установим 30 мин:
         maxAge: 30 * 60,
       });
 
       cookieStore.set("refresh_token", data.refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: env.NODE_ENV === "production",
         sameSite: "lax",
         path: "/",
         maxAge: 7 * 24 * 60 * 60, // 7 дней
@@ -72,6 +83,7 @@ export async function refreshAccessToken(
       return data.accessToken;
     })
     .catch(async (error) => {
+      console.error("Token refresh error:", error);
       // В случае ошибки прибиваем плохие куки (чтобы юзера выкинуло на login)
       const cookieStore = await cookies();
       cookieStore.delete("access_token");

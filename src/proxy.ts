@@ -4,20 +4,11 @@ import type { NextRequest } from "next/server";
 // Список маршрутов, доступных без авторизации
 const publicRoutes = ["/login"];
 
-export default function proxy(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Пропускаем статику и API роуты
-  if (
-    pathname.startsWith("/_next") ||
-    pathname.startsWith("/api") ||
-    pathname.includes(".")
-  ) {
-    return NextResponse.next();
-  }
-
   // Легковесная проверка: есть ли какие-нибудь токены в куках
-  // Углубленную валидацию будет делать fetcher на уровне RSC
+  // Proxy не валидирует JWT-подпись — только проверяет наличие cookie (правило §6)
   const hasAccessToken = request.cookies.has("access_token");
   const hasRefreshToken = request.cookies.has("refresh_token");
   const isAuthenticated = hasAccessToken || hasRefreshToken;
@@ -44,3 +35,8 @@ export default function proxy(request: NextRequest) {
 
   return NextResponse.next();
 }
+
+// Matcher для proxy — ограничиваем обработку только нужными маршрутами
+export const config = {
+  matcher: ["/", "/login", "/dashboard/:path*"],
+};
