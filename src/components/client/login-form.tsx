@@ -58,7 +58,7 @@ export function LoginForm() {
               id="username"
               name="username"
               type="text"
-              placeholder="emilys"
+              placeholder="Введите имя пользователя"
               required
               autoComplete="username"
               disabled={isPending}
@@ -71,7 +71,7 @@ export function LoginForm() {
               id="password"
               name="password"
               type="password"
-              placeholder="••••••••"
+              placeholder="Введите пароль"
               required
               autoComplete="current-password"
               disabled={isPending}
@@ -80,7 +80,11 @@ export function LoginForm() {
         </CardContent>
 
         <CardFooter className="flex flex-col gap-4">
-          <Button type="submit" className="w-full" disabled={isPending}>
+          <Button
+            type="submit"
+            className="w-full mt-5 cursor-pointer"
+            disabled={isPending}
+          >
             {isPending ? "Вход..." : "Войти"}
           </Button>
 

@@ -21,6 +21,7 @@ export async function apiFetch<T>(
   const {
     requireAuth = true,
     headers: customHeaders,
+    cache = "no-store", // Правило §3 — авторизованные данные не кешировать
     ...restOptions
   } = options;
 
@@ -42,7 +43,7 @@ export async function apiFetch<T>(
     : `${env.API_BASE_URL}${endpoint}`;
 
   // 2. Делаем запрос
-  const response = await fetch(url, { headers, ...restOptions });
+  const response = await fetch(url, { headers, cache, ...restOptions });
 
   // 3. Обработка 401
   if (response.status === 401) {
