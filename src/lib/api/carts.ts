@@ -10,7 +10,9 @@ import type {
 } from "@/lib/api/types/cart.schema";
 
 export async function getUserCarts(userId: number): Promise<UserCartsResponse> {
-  return apiFetch(`/auth/carts/user/${userId}`, userCartsResponseSchema);
+  return apiFetch(`/auth/carts/user/${userId}`, userCartsResponseSchema, {
+    next: { revalidate: 60 },
+  });
 }
 
 export async function addToCart(

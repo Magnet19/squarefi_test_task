@@ -27,7 +27,8 @@ export async function apiFetch<T>(
     ...restOptions
   } = options;
 
-  const resolvedCache = cache ?? (next?.revalidate !== undefined ? undefined : "no-store");
+  const resolvedCache =
+    cache ?? (next?.revalidate !== undefined ? undefined : "no-store");
 
   const headers = new Headers(customHeaders);
   headers.set("Content-Type", "application/json");
@@ -47,15 +48,37 @@ export async function apiFetch<T>(
     : `${env.API_BASE_URL}${endpoint}`;
 
   // 2. Делаем запрос с retry при rate limit
-  let response = await fetch(url, { headers, cache: resolvedCache, next, ...restOptions });
+  let response = await fetch(url, {
+    headers,
+    cache: resolvedCache,
+    next,
+    ...restOptions,
+  });
 
-  if (response.status === 429 || (response.status !== 401 && !response.ok)) {
-    const errText = await response.text();
-    if (errText.includes("request limit exceeded")) {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      response = await fetch(url, { headers, cache: resolvedCache, next, ...restOptions });
-    } else if (!response.ok) {
-      throw new Error(errText || `API Error: ${response.status}`);
+  const maxRetries = 3;
+  let delay = 1000;
+  let retryCount = 0;
+
+  while (retryCount < maxRetries) {
+    if (response.ok || response.status === 401) {
+      break;
+    }
+
+    const clonedResponse = response.clone();
+    const errText = await clonedResponse.text().catch(() => "");
+
+    if (response.status === 429 || errText.includes("request limit exceeded")) {
+      retryCount++;
+      await new Promise((resolve) => setTimeout(resolve, delay));
+      delay *= 2; // exponential backoff: 1s, 2s, 4s...
+      response = await fetch(url, {
+        headers,
+        cache: resolvedCache,
+        next,
+        ...restOptions,
+      });
+    } else {
+      break;
     }
   }
 

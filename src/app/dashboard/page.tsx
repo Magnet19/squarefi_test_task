@@ -1,29 +1,13 @@
-import { z } from "zod";
 import { getMe } from "@/lib/api/user";
 import { getProducts } from "@/lib/api/products";
 import { getUserCarts } from "@/lib/api/carts";
 import { DashboardHeader } from "@/components/server/dashboard-header/dashboard-header";
-import { ProductCard } from "@/components/server/product-card/product-card";
-import { Pagination } from "@/components/client/pagination/pagination";
+import { ProductList } from "@/components/client/product-list/product-list";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const PRODUCTS_PER_PAGE = 5;
 
-const searchParamsSchema = z.object({
-  page: z.coerce.number().int().positive().catch(1),
-});
-
-interface DashboardPageProps {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-}
-
-export default async function DashboardPage({
-  searchParams,
-}: DashboardPageProps) {
-  const rawParams = await searchParams;
-  const { page } = searchParamsSchema.parse(rawParams);
-  const skip = (page - 1) * PRODUCTS_PER_PAGE;
-
+export default async function DashboardPage() {
   const user = await getMe();
 
   const [cartsResult, productsResult] = await Promise.all([
@@ -31,7 +15,7 @@ export default async function DashboardPage({
       console.error("Failed to load carts:", err);
       return null;
     }),
-    getProducts(PRODUCTS_PER_PAGE, skip).catch((err: unknown) => {
+    getProducts(PRODUCTS_PER_PAGE, 0).catch((err: unknown) => {
       console.error("Failed to load products:", err);
       return null;
     }),
@@ -91,22 +75,11 @@ export default async function DashboardPage({
       <div className="space-y-4">
         <h2 className="text-lg font-semibold">Продукты</h2>
         {productsResult ? (
-          <>
-            <div className="flex flex-col gap-4">
-              {productsResult.products.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  userId={user.id}
-                />
-              ))}
-            </div>
-            <Pagination
-              page={page}
-              total={productsResult.total}
-              limit={PRODUCTS_PER_PAGE}
-            />
-          </>
+          <ProductList
+            initialProducts={productsResult.products}
+            initialTotal={productsResult.total}
+            userId={user.id}
+          />
         ) : (
           <p className="text-destructive text-sm">
             Не удалось загрузить продукты
