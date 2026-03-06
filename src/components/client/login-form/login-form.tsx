@@ -75,7 +75,7 @@ export function LoginForm() {
           </div>
         </CardContent>
 
-        <CardFooter className="flex flex-col gap-4">
+        <CardFooter className="flex flex-col gap-2">
           <Button
             type="submit"
             className="w-full mt-5 cursor-pointer"
@@ -92,6 +92,16 @@ export function LoginForm() {
             /{" "}
             <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">
               emilyspass
+            </code>
+          </p>
+          <p className="text-xs text-muted-foreground text-center">
+            С корзиной:{" "}
+            <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">
+              oliviaw
+            </code>{" "}
+            /{" "}
+            <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs">
+              oliviawpass
             </code>
           </p>
         </CardFooter>

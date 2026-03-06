@@ -22,7 +22,12 @@ export function AddToCartButton({ userId, productId }: AddToCartButtonProps) {
   }
 
   return (
-    <Button size="sm" onClick={handleAddToCart} disabled={isPending} className="min-w-[90px]">
+    <Button
+      size="sm"
+      onClick={handleAddToCart}
+      disabled={isPending}
+      className="w-[95px]"
+    >
       {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "В корзину"}
     </Button>
   );

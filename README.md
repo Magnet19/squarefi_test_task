@@ -51,3 +51,5 @@ bun dev
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 > You can use any test account from [DummyJSON users](https://dummyjson.com/users), e.g. username: `emilys`, password: `emilyspass`.
+>
+> To see a non-empty cart, use an account that has cart data in DummyJSON, e.g. username: `oliviaw`, password: `oliviawpass`.
