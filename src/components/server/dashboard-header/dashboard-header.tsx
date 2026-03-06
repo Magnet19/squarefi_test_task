@@ -1,9 +1,5 @@
-import { LogoutButton } from "@/components/client/logout-button";
-import type { User } from "@/lib/api/types/auth.schema";
-
-interface DashboardHeaderProps {
-  user: User;
-}
+import { LogoutButton } from "@/components/client/logout-button/logout-button";
+import type { DashboardHeaderProps } from "./dashboard-header.types";
 
 export function DashboardHeader({ user }: DashboardHeaderProps) {
   return (

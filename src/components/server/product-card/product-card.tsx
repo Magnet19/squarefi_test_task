@@ -1,5 +1,4 @@
-import type { Product } from "@/lib/api/types/product.schema";
-import { AddToCartButton } from "@/components/client/add-to-cart-button";
+import { AddToCartButton } from "@/components/client/add-to-cart-button/add-to-cart-button";
 import {
   Card,
   CardContent,
@@ -7,11 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
-interface ProductCardProps {
-  product: Product;
-  userId: number;
-}
+import type { ProductCardProps } from "./product-card.types";
 
 export function ProductCard({ product, userId }: ProductCardProps) {
   return (

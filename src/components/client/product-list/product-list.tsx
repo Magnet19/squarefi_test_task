@@ -3,18 +3,23 @@
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { loadMoreProductsAction } from "@/lib/actions/product.actions";
-import { AddToCartButton } from "@/components/client/add-to-cart-button";
+import { AddToCartButton } from "@/components/client/add-to-cart-button/add-to-cart-button";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import type { Product } from "@/lib/api/types/product.schema";
+import type { ProductListProps } from "./product-list.types";
 
-interface ProductListProps {
-  initialProducts: Product[];
-  initialTotal: number;
-  userId: number;
-}
-
-export function ProductList({ initialProducts, initialTotal, userId }: ProductListProps) {
+export function ProductList({
+  initialProducts,
+  initialTotal,
+  userId,
+}: ProductListProps) {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [isPending, startTransition] = useTransition();
 
@@ -37,11 +42,15 @@ export function ProductList({ initialProducts, initialTotal, userId }: ProductLi
         {products.map((product) => (
           <Card key={product.id}>
             <CardHeader>
-              <CardTitle className="text-sm line-clamp-2">{product.title}</CardTitle>
+              <CardTitle className="text-sm line-clamp-2">
+                {product.title}
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-1 text-sm">
               <p className="font-semibold">${product.price}</p>
-              <p className="text-muted-foreground line-clamp-2">{product.description}</p>
+              <p className="text-muted-foreground line-clamp-2">
+                {product.description}
+              </p>
             </CardContent>
             <CardFooter>
               <AddToCartButton userId={userId} productId={product.id} />
@@ -52,7 +61,11 @@ export function ProductList({ initialProducts, initialTotal, userId }: ProductLi
 
       {hasMore && (
         <div className="flex justify-center pt-2">
-          <Button variant="outline" onClick={handleLoadMore} disabled={isPending}>
+          <Button
+            variant="outline"
+            onClick={handleLoadMore}
+            disabled={isPending}
+          >
             {isPending ? "Загрузка..." : "Загрузить ещё"}
           </Button>
         </div>

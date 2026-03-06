@@ -2,12 +2,7 @@
 
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-
-interface PaginationProps {
-  page: number;
-  total: number;
-  limit: number;
-}
+import type { PaginationProps } from "./pagination.types";
 
 export function Pagination({ page, total, limit }: PaginationProps) {
   const router = useRouter();

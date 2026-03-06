@@ -4,11 +4,7 @@ import { useTransition } from "react";
 import { toast } from "sonner";
 import { addToCartAction } from "@/lib/actions/cart.actions";
 import { Button } from "@/components/ui/button";
-
-interface AddToCartButtonProps {
-  userId: number;
-  productId: number;
-}
+import type { AddToCartButtonProps } from "./add-to-cart-button.types";
 
 export function AddToCartButton({ userId, productId }: AddToCartButtonProps) {
   const [isPending, startTransition] = useTransition();

@@ -2,9 +2,9 @@ import { z } from "zod";
 import { getMe } from "@/lib/api/user";
 import { getProducts } from "@/lib/api/products";
 import { getUserCarts } from "@/lib/api/carts";
-import { DashboardHeader } from "@/components/server/dashboard-header";
-import { ProductCard } from "@/components/server/product-card";
-import { Pagination } from "@/components/client/pagination";
+import { DashboardHeader } from "@/components/server/dashboard-header/dashboard-header";
+import { ProductCard } from "@/components/server/product-card/product-card";
+import { Pagination } from "@/components/client/pagination/pagination";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const PRODUCTS_PER_PAGE = 6;

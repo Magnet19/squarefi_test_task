@@ -1,4 +1,4 @@
-import { LoginForm } from "@/components/client/login-form";
+import { LoginForm } from "@/components/client/login-form/login-form";
 
 export const metadata = {
   title: "Вход — E-Commerce",
