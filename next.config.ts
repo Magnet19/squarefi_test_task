@@ -3,6 +3,16 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactCompiler: true,
 
+  experimental: {
+    optimizePackageImports: [
+      "lucide-react",
+      "radix-ui",
+      "sonner",
+      "next-themes",
+      "class-variance-authority",
+    ],
+  },
+
   // HTTP-заголовки безопасности (правило §6)
   headers: async () => [
     {
