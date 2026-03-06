@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Image from "next/image";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { loadMoreProductsAction } from "@/lib/actions/product.actions";
@@ -37,6 +38,13 @@ export function ProductList({
         {products.map((product) => (
           <Card key={product.id}>
             <div className="flex flex-col gap-3 px-6 md:flex-row md:items-center md:justify-between">
+              <Image
+                src={product.thumbnail}
+                alt={product.title}
+                width={64}
+                height={64}
+                className="rounded-md object-cover shrink-0"
+              />
               <div className="flex-1 space-y-1">
                 <CardTitle className="text-sm">{product.title}</CardTitle>
                 <p className="text-sm text-muted-foreground">

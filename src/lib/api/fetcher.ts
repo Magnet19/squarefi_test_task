@@ -1,7 +1,7 @@
 import "server-only";
 import type { ZodType } from "zod";
 import { redirect } from "next/navigation";
-import { getValidAccessToken } from "@/lib/auth/refresh";
+import { getValidAccessToken, refreshTokens } from "@/lib/auth/refresh";
 import { env } from "@/lib/env";
 
 interface FetchOptions extends RequestInit {
@@ -82,9 +82,24 @@ export async function apiFetch<T>(
     }
   }
 
-  // 3. Обработка 401
+  // 3. Обработка 401 — попытка рефреша, затем повтор запроса
   if (response.status === 401) {
-    redirect("/login");
+    const newToken = await refreshTokens();
+    if (!newToken) {
+      redirect("/login");
+    }
+
+    headers.set("Authorization", `Bearer ${newToken}`);
+    response = await fetch(url, {
+      headers,
+      cache: resolvedCache,
+      next,
+      ...restOptions,
+    });
+
+    if (response.status === 401) {
+      redirect("/login");
+    }
   }
 
   if (!response.ok) {
