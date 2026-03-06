@@ -1,0 +1,120 @@
+[
+  {
+    "phase": 1,
+    "title": "Инициализация и Базовая Архитектура",
+    "description": "Создание фундамента проекта, настройка типов, API-клиента и логики Single Refresh",
+    "tasks": [
+      {
+        "id": "1.1",
+        "title": "Инициализация Next.js и установка зависимостей",
+        "status": "completed"
+      },
+      {
+        "id": "1.2",
+        "title": "Установка и инициализация shadcn/ui",
+        "status": "completed"
+      },
+      {
+        "id": "1.3",
+        "title": "Определение типов Zod и TypeScript для DummyJSON",
+        "status": "completed"
+      },
+      {
+        "id": "1.4",
+        "title": "Реализация паттерна Single Refresh (getValidAccessToken)",
+        "status": "completed"
+      },
+      {
+        "id": "1.5",
+        "title": "Сборка изолированного API-клиента (apiFetch)",
+        "status": "completed"
+      },
+      {
+        "id": "1.6",
+        "title": "Защита страниц через proxy.ts",
+        "status": "completed"
+      },
+      {
+        "id": "1.7",
+        "title": "Настройка Auth Server Actions (loginAction, logoutAction)",
+        "status": "completed"
+      }
+    ]
+  },
+  {
+    "phase": 2,
+    "title": "Аутентификация и UI",
+    "description": "Построение интерфейса авторизации и рендер страницы логина",
+    "tasks": [
+      {
+        "id": "2.1",
+        "title": "Создание UI-компонента LoginForm с валидацией",
+        "status": "pending"
+      },
+      {
+        "id": "2.2",
+        "title": "Интеграция LoginForm с Server Action и обработка состояния",
+        "status": "pending"
+      },
+      {
+        "id": "2.3",
+        "title": "Создание Server Component для маршрута /login",
+        "status": "pending"
+      }
+    ]
+  },
+  {
+    "phase": 3,
+    "title": "Dashboard и Список продуктов",
+    "description": "SSR рендеринг списка товаров, серверная пагинация",
+    "tasks": [
+      {
+        "id": "3.1",
+        "title": "Создание макета (layout) для Dashboard",
+        "status": "pending"
+      },
+      {
+        "id": "3.2",
+        "title": "Реализация UI-компонента ProductCard",
+        "status": "pending"
+      },
+      {
+        "id": "3.3",
+        "title": "Реализация компонента пагинации (Client Component c update URL)",
+        "status": "pending"
+      },
+      {
+        "id": "3.4",
+        "title": "Связка apiFetch c Server Component /dashboard/page.tsx",
+        "status": "pending"
+      }
+    ]
+  },
+  {
+    "phase": 4,
+    "title": "Взаимодействие с корзиной",
+    "description": "Интеграция Server Actions для работы с корзиной без глобального стейта",
+    "tasks": [
+      {
+        "id": "4.1",
+        "title": "Написание Server Action addToCartAction",
+        "status": "pending"
+      },
+      {
+        "id": "4.2",
+        "title": "Создание компонента AddToCartButton",
+        "status": "pending"
+      },
+      {
+        "id": "4.3",
+        "title": "Интеграция Sonner для тостов (уведомлений)",
+        "status": "pending"
+      },
+      {
+        "id": "4.4",
+        "title": "Настройка revalidatePath после мутации добавления в корзину",
+        "status": "pending"
+      }
+    ]
+  }
+]
