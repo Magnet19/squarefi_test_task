@@ -38,6 +38,11 @@
         "id": "1.7",
         "title": "Настройка Auth Server Actions (lib/actions/auth.actions.ts) с возвратом типа ActionResult",
         "status": "completed"
+      },
+      {
+        "id": "1.8",
+        "title": "Создание утилиты для парсинга exp из JWT для установки maxAge куки (без верификации)",
+        "status": "completed"
       }
     ]
   },
@@ -60,6 +65,11 @@
         "id": "2.3",
         "title": "Создание Server Component для маршрута /login с error.tsx boundary",
         "status": "completed"
+      },
+      {
+        "id": "2.4",
+        "title": "Создание Root-редиректа (app/page.tsx) для перенаправления на /login или /dashboard",
+        "status": "completed"
       }
     ]
   },
@@ -70,7 +80,7 @@
     "tasks": [
       {
         "id": "3.1",
-        "title": "Создание page.tsx для /dashboard с параллельной загрузкой SSR (Promise.all для user, carts, products)",
+        "title": "Создание page.tsx для /dashboard с параллельной загрузкой SSR (Promise.all для user, carts, products) и Zod-валидацией searchParams",
         "status": "completed"
       },
       {
@@ -80,12 +90,17 @@
       },
       {
         "id": "3.3",
-        "title": "Реализация компонента пагинации (Client Component c update URL searchParams)",
+        "title": "Реализация компонента Load More (Client Component) для дозагрузки продуктов в конец списка",
         "status": "completed"
       },
       {
         "id": "3.4",
         "title": "Добавление локального error.tsx для Dashboard",
+        "status": "completed"
+      },
+      {
+        "id": "3.5",
+        "title": "Создание UI для Header на Dashboard с кнопкой 'Выйти' (интеграция с auth.actions.ts)",
         "status": "completed"
       }
     ]

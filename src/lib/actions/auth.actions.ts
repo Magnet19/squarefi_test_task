@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import type { ActionResult } from "@/types/dummyjson";
 import { authResponseSchema } from "@/lib/api/types/auth.schema";
 import { env } from "@/lib/env";
+import { getJwtMaxAge } from "@/lib/auth/jwt";
 
 const loginSchema = z.object({
   username: z.string().min(1, "Имя пользователя обязательно"),
@@ -64,7 +65,7 @@ export async function loginAction(
       secure: env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 30 * 60, // 30 минут
+      maxAge: getJwtMaxAge(data.accessToken) ?? 30 * 60,
     });
 
     // Refresh токен на долгое время
@@ -73,7 +74,7 @@ export async function loginAction(
       secure: env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 7 * 24 * 60 * 60, // 7 дней
+      maxAge: getJwtMaxAge(data.refreshToken) ?? 7 * 24 * 60 * 60,
     });
 
     return { success: true, data: { redirect: "/dashboard" } };

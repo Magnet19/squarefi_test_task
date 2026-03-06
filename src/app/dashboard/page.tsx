@@ -2,7 +2,7 @@ import { z } from "zod";
 import { getMe } from "@/lib/api/user";
 import { getProducts } from "@/lib/api/products";
 import { getUserCarts } from "@/lib/api/carts";
-import { LogoutButton } from "@/components/client/logout-button";
+import { DashboardHeader } from "@/components/server/dashboard-header";
 import { ProductCard } from "@/components/server/product-card";
 import { Pagination } from "@/components/client/pagination";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -39,11 +39,7 @@ export default async function DashboardPage({
 
   return (
     <main className="min-h-screen p-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-        <LogoutButton />
-      </div>
+      <DashboardHeader user={user} />
 
       {/* User info */}
       <Card>

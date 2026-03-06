@@ -2,6 +2,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import { authResponseSchema } from "@/lib/api/types/auth.schema";
 import { env } from "@/lib/env";
+import { getJwtMaxAge } from "@/lib/auth/jwt";
 
 const refreshPromises = new Map<string, Promise<string | null>>();
 
@@ -69,7 +70,7 @@ export async function refreshAccessToken(
         secure: env.NODE_ENV === "production",
         sameSite: "lax",
         path: "/",
-        maxAge: 30 * 60,
+        maxAge: getJwtMaxAge(data.accessToken) ?? 30 * 60,
       });
 
       cookieStore.set("refresh_token", data.refreshToken, {
@@ -77,7 +78,7 @@ export async function refreshAccessToken(
         secure: env.NODE_ENV === "production",
         sameSite: "lax",
         path: "/",
-        maxAge: 7 * 24 * 60 * 60, // 7 дней
+        maxAge: getJwtMaxAge(data.refreshToken) ?? 7 * 24 * 60 * 60,
       });
 
       return data.accessToken;
