@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { addToCart } from "@/lib/api/carts";
-import type { ActionResult } from "@/types/dummyjson";
+import type { ActionResult } from "@/types";
 import type { AddCartResponse } from "@/lib/api/types/cart.schema";
 
 const addToCartSchema = z.object({

@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { cookies } from "next/headers";
-import type { ActionResult } from "@/types/dummyjson";
+import type { ActionResult } from "@/types";
 import { authResponseSchema } from "@/lib/api/types/auth.schema";
 import { env } from "@/lib/env";
 import { getJwtMaxAge } from "@/lib/auth/jwt";

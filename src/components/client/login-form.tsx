@@ -16,7 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { ActionResult } from "@/types/dummyjson";
+import type { ActionResult } from "@/types";
 
 const initialState: ActionResult<{ redirect: string }> | null = null;
 

@@ -1,7 +1,7 @@
 "use server";
 
 import { getProducts } from "@/lib/api/products";
-import type { ActionResult } from "@/types/dummyjson";
+import type { ActionResult } from "@/types";
 import type { ProductsResponse } from "@/lib/api/types/product.schema";
 
 export async function loadMoreProductsAction(

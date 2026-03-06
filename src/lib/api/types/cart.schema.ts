@@ -7,7 +7,8 @@ const cartProductSchema = z.object({
   quantity: z.number(),
   total: z.number(),
   discountPercentage: z.number(),
-  discountedTotal: z.number(),
+  discountedTotal: z.number().optional(),
+  discountedPrice: z.number().optional(),
   thumbnail: z.string(),
 });
 

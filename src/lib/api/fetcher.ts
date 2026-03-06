@@ -1,5 +1,6 @@
 import "server-only";
 import type { ZodType } from "zod";
+import { redirect } from "next/navigation";
 import { getValidAccessToken } from "@/lib/auth/refresh";
 import { env } from "@/lib/env";
 
@@ -34,7 +35,7 @@ export async function apiFetch<T>(
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     } else {
-      throw new Error("401 Unauthorized");
+      redirect("/login");
     }
   }
 
@@ -47,7 +48,7 @@ export async function apiFetch<T>(
 
   // 3. Обработка 401
   if (response.status === 401) {
-    throw new Error("401 Unauthorized");
+    redirect("/login");
   }
 
   if (!response.ok) {
